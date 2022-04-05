@@ -3,7 +3,7 @@
 * Run `flow emulator start -v` at the root of this project
 * Run `go build && ./flow-go-ecdsa`
 
-Flow is using ecdsa as signing algorithms(nistp256 and secp256k1). For other blockchains like Bitcoin/Ethereum, they choose the low-s form signature as the canonical one to prevent the problems caused by transaction malleability. But on Flow, both low-s form signature and high-s form signature are regarded as valid. We can check it via `HighSSignatureDemo`. Due to the malleability of signature, the transaction malleability attack would be possible on Flow. We can check it via `ReplaceTransactionSignatureDemo`.
+Flow is using ecdsa as signing algorithms(nistp256 and secp256k1). For other blockchains like Bitcoin/Ethereum, they choose the low-s form signature as the canonical one to prevent the problems caused by transaction malleability. But on Flow, both low-s form signature and high-s form signature are regarded as valid(check it via `HighSSignatureDemo` function). The malleability of signature might cause transactino malleability problem on Flow(check it via `ReplaceTransactionSignatureDemo` function).
 
 ## HighSSignatureDemo
 
@@ -31,4 +31,4 @@ In this function, we:
 * calculate the txid of the `tx` and get `trickTxID`
 * broadcast the tx with `trickSig`
 
-You will find that the `tx` can be broadcasted successfully and the `trickTxID` is totally different with `origTxID`, which means we have successfully performed a transaction malleability attack.
+You will find that the `tx` can be broadcasted successfully and the `trickTxID` is totally different with `origTxID`, which means there do exist transaction malleability problem on Flow.
