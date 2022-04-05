@@ -55,18 +55,25 @@ func HighSSignatureDemo() {
 		}
 	}
 	fmt.Printf("get high-s signature %s\n", hex.EncodeToString(sig))
-	isValid, err := privateKey.PublicKey().Verify(sig, msg, hasher)
+	highSIsValidOnFlow, err := privateKey.PublicKey().Verify(sig, msg, hasher)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("signature(high-s) is valid on flow?: %v\n", isValid)
+	fmt.Printf("signature(high-s) is valid on flow?: %v\n", highSIsValidOnFlow)
 
-	highSSigIsValid := ethcrypto.VerifySignature(privateKey.PublicKey().EncodeCompressed(), digest[:], sig)
-	fmt.Printf("signature(high-s) is valid on ethereum?: %v\n", highSSigIsValid)
+	highSIsValidOnEthereum := ethcrypto.VerifySignature(privateKey.PublicKey().EncodeCompressed(), digest[:], sig)
+	fmt.Printf("signature(high-s) is valid on ethereum?: %v\n", highSIsValidOnEthereum)
 
 	trickR, trickS := TrickSig(r, s, curve)
 	trickSig := append(trickR.Bytes(), trickS.Bytes()...)
-	lowSSigIsValid := ethcrypto.VerifySignature(privateKey.PublicKey().EncodeCompressed(), digest[:], trickSig)
-	fmt.Printf("trick signature(low-s) is valid on ethereum?: %v\n", lowSSigIsValid)
+
+	lowSIsValidOnFlow, err := privateKey.PublicKey().Verify(trickSig, msg, hasher)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("trick signature(high-s) is valid on flow?: %v\n", lowSIsValidOnFlow)
+
+	lowSIsValidOnEthereum := ethcrypto.VerifySignature(privateKey.PublicKey().EncodeCompressed(), digest[:], trickSig)
+	fmt.Printf("trick signature(low-s) is valid on ethereum?: %v\n", lowSIsValidOnEthereum)
 	fmt.Println()
 }

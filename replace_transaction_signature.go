@@ -64,14 +64,16 @@ func ReplaceTransactionSignatureDemo() {
 
 	origSigJSON, err := json.MarshalIndent(tx.EnvelopeSignatures[0], "", "  ")
 	fmt.Printf("orig sig json: %s\n", string(origSigJSON))
-	fmt.Printf("orig txid is %s\n", hex.EncodeToString(tx.ID().Bytes()))
+	origTxID := hex.EncodeToString(tx.ID().Bytes())
+	fmt.Printf("orig txid is %s\n", origTxID)
 	fmt.Println()
 
 	replaceSignature(tx, ethcrypto.S256())
 
 	trickSigJSON, err := json.MarshalIndent(tx.EnvelopeSignatures[0], "", "  ")
 	fmt.Printf("trick sig json: %s\n", string(trickSigJSON))
-	fmt.Printf("trick txid is %s\n", hex.EncodeToString(tx.ID().Bytes()))
+	trickTxID := hex.EncodeToString(tx.ID().Bytes())
+	fmt.Printf("trick txid is %s\n", trickTxID)
 
 	err = flowClient.SendTransaction(ctx, *tx)
 	examples.Handle(err)
